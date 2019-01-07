@@ -26,12 +26,23 @@
     </item>
     
     <item>
+      <title>Use C&#43;&#43; speed BAS in r</title>
+      <link>/2019/01/07/use-c-speed-bas-in-r/</link>
+      <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/01/07/use-c-speed-bas-in-r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>About</title>
       <link>/about/</link>
       <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
       
       <guid>/about/</guid>
-      <description>This is a &amp;ldquo;hello world&amp;rdquo; example website for the blogdown package. The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.</description>
+      <description>关于本站构建：
+ This is a &amp;ldquo;hello world&amp;rdquo; example website for the blogdown package. The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.  关于BAS：BAS是一种高效的随机优化算法，由Jiang和Li（2017）提出。
+ 相关论文 工具箱  </description>
     </item>
     
   </channel>
