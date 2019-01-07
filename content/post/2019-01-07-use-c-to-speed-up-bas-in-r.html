@@ -87,10 +87,7 @@ Rcpp::List BAScpp(const colvec &amp; minbound,
                             Rcpp::Named(&quot;fbest&quot;) = fbest);
 }</code></pre>
 <p>在<code>R</code>中加载该<code>cpp</code>文件，并用于优化。</p>
-<pre class="r"><code>sourceCpp(&#39;cpp文件的路径.cpp&#39;)</code></pre>
-<pre class="r"><code>library(Rcpp)
-library(RcppArmadillo)
-sourceCpp(&#39;D:/JYwang_HUST/rBAS/Rcppstudy/RcppBAS.cpp&#39;)</code></pre>
+<pre class="r"><code>Rcpp::sourceCpp(&#39;cpp文件的路径.cpp&#39;)</code></pre>
 <pre class="r"><code>system.time({
   testc &lt;- BAScpp(fn = mich,minbound = c(-6,0), maxbound = c(-1,2))
 })</code></pre>
@@ -106,5 +103,5 @@ sourceCpp(&#39;D:/JYwang_HUST/rBAS/Rcppstudy/RcppBAS.cpp&#39;)</code></pre>
 })</code></pre>
 <pre><code>##    user  system elapsed 
 ##    0.43    0.18    0.61</code></pre>
-<p>从耗时上看，利用<code>cpp</code>加速的<code>R</code>代码会表现出更佳的计算速度。</p>
+<p>从耗时上看，利用<code>cpp</code>加速的<code>R</code>代码表现出了极佳的计算速度。</p>
 </div>

@@ -96,10 +96,10 @@ Rcpp::List BAScpp(const colvec & minbound,
 在`R`中加载该`cpp`文件，并用于优化。
 
 ```{r,eval=FALSE}
-sourceCpp('cpp文件的路径.cpp')
+Rcpp::sourceCpp('cpp文件的路径.cpp')
 ```
 
-```{r,include=TRUE,eval=FALSE}
+```{r,include=FALSE,eval=FALSE}
 library(Rcpp)
 library(RcppArmadillo)
 sourceCpp('D:/JYwang_HUST/rBAS/Rcppstudy/RcppBAS.cpp')
@@ -134,4 +134,4 @@ system.time({
 ```
 
 
-从耗时上看，利用`cpp`加速的`R`代码会表现出更佳的计算速度。
+从耗时上看，利用`cpp`加速的`R`代码表现出了极佳的计算速度。
