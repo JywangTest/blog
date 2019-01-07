@@ -26,12 +26,15 @@
     </item>
     
     <item>
-      <title>Use C&#43;&#43; speed BAS in r</title>
+      <title>Use Cpp to speed BAS in r</title>
       <link>/2019/01/07/use-c-speed-bas-in-r/</link>
       <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/01/07/use-c-speed-bas-in-r/</guid>
-      <description></description>
+      <description>之前一直有使用c/c++来写重写BAS工具箱的想法，原因在于似乎更多的同学选择使用matlab。而R又受到了使用面和性能的掣肘，于是，用C/C++来写一个工具箱，然后再做matlab，python或是R的API，似乎是更好的选择。
+先考虑使用c++来加速R中rbas工具箱。
+定义目标函数mich &amp;lt;- function(x){y1 &amp;lt;- -sin(x[1])*(sin((x[1]^2)/pi))^20y2 &amp;lt;- -sin(x[2])*(sin((2*x[2]^2)/pi))^20return(y1+y2)}Rcpp借助Armadillo线性代数库，我们能更方便地进行运算而不必过多关注语法。一个较为粗糙的实现BAS算法的Cpp文件如下：
+#include &amp;lt;RcppArmadillo.h&amp;gt;using namespace arma;using namespace Rcpp;//[[Rcpp::depends(RcppArmadillo)]]//[[Rcpp::export]]double sign_c(double x){double res;if(x &amp;gt;= 0){res = 1;}else{res = -1;}return res;}//[[Rcpp::export]]Rcpp::List BAScpp(const colvec &amp;amp; minbound,const colvec &amp;amp; maxbound,Function fn){int i;const double d0 = 0.001;double d = 3.</description>
     </item>
     
     <item>

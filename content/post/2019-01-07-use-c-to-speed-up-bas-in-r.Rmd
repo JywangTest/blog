@@ -1,0 +1,137 @@
+---
+title: Use Cpp to speed BAS in r
+author: Jiangyu Wang
+date: '2019-01-07'
+slug: use-c-speed-bas-in-r
+categories: []
+tags: []
+---
+
+之前一直有使用`c/c++`来写重写`BAS`工具箱的想法，原因在于似乎更多的同学选择使用`matlab`。而`R`又受到了使用面和性能的掣肘，于是，用`C/C++`来写一个工具箱，然后再做`matlab`，`python`或是`R`的API，似乎是更好的选择。
+
+先考虑使用c++来加速R中rbas工具箱。
+
+### 定义目标函数
+
+```{r}
+mich <- function(x){
+  y1 <- -sin(x[1])*(sin((x[1]^2)/pi))^20
+  y2 <- -sin(x[2])*(sin((2*x[2]^2)/pi))^20
+  return(y1+y2)
+}
+```
+
+
+### Rcpp
+
+借助`Armadillo`线性代数库，我们能更方便地进行运算而不必过多关注语法。一个较为粗糙的实现`BAS`算法的`Cpp`文件如下：
+
+```cpp 
+#include <RcppArmadillo.h>
+using namespace arma;
+using namespace Rcpp;
+//[[Rcpp::depends(RcppArmadillo)]]
+//[[Rcpp::export]]
+double sign_c(double x){
+  double res;
+  if(x >= 0){
+    res = 1;
+  }
+  else{
+    res = -1;
+  }
+  return res;
+}
+//[[Rcpp::export]]
+Rcpp::List BAScpp(const colvec & minbound,
+                  const colvec & maxbound,
+                  Function fn){
+  int i;
+  const double d0 = 0.001;
+  double d  = 3.0;
+  const double eta_d = 0.95;
+  
+  double step = 0.8;
+  const double eta_step = 0.95;
+  const int n = 100;
+  
+  const int npar = minbound.size();
+  vec x0 = 4 * runif(npar,-1.0,1.0);
+  
+  vec x = x0;
+  vec xbest = x0;
+  double fbest = as<double>(fn(xbest));
+  
+  
+  
+  //cout << "Iter: 0 xbest" << xbest << endl;
+  
+  for(i = 0; i < n; i++){
+    vec dir = runif(npar,-1.0,1.0);
+    dir = normalise(dir);
+    
+    vec xleft = x + dir*d;
+    double fleft = as<double>(fn(xleft));
+    vec xright = x - dir*d;
+    double fright = as<double>(fn(xright));
+    
+    x = x - step*dir*sign_c(fleft-fright);
+    double f = as<double>(fn(x));
+    
+    if(f < fbest){
+      xbest = x;
+      fbest = f;
+    }
+    
+    //cout << "Iter:"<< i+1 <<"xbest" << xbest << "fbest"<< fbest<<endl;
+  }
+  d = d*eta_d + d0;
+  step = step*eta_step;
+  
+  return Rcpp::List::create(Rcpp::Named("xbest") = xbest,
+                            Rcpp::Named("fbest") = fbest);
+}
+```
+
+在`R`中加载该`cpp`文件，并用于优化。
+
+```{r,eval=FALSE}
+sourceCpp('cpp文件的路径.cpp')
+```
+
+```{r,include=TRUE,eval=FALSE}
+library(Rcpp)
+library(RcppArmadillo)
+sourceCpp('D:/JYwang_HUST/rBAS/Rcppstudy/RcppBAS.cpp')
+```
+
+
+```{r,eval=FALSE}
+system.time({
+  testc <- BAScpp(fn = mich,minbound = c(-6,0), maxbound = c(-1,2))
+})
+```
+
+```
+##    user  system elapsed 
+##    0.03    0.00    0.03
+```
+
+
+### rBAS优化
+
+```{r,eval=FALSE}
+system.time({
+  testr <- rBAS::BASoptim(fn = mich,
+                         lower = c(-6,0), upper = c(-1,2),
+                         seed = 1, n = 100,trace = F)
+})
+```
+
+```
+##    user  system elapsed 
+##    0.43    0.18    0.61
+```
+
+
+从耗时上看，利用`cpp`加速的`R`代码会表现出更佳的计算速度。
