@@ -1,1 +1,3 @@
-# blogTest for git and Rstudio
+# blogTest
+
+test for git and rstudio
