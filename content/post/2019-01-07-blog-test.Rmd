@@ -1,0 +1,47 @@
+---
+title: Blog Test
+author: Jiangyu Wang
+date: '2019-01-07'
+slug: blog-test
+categories: []
+tags: []
+---
+
+`blog`采用yihui的[`blogdown`](https://github.com/rstudio/blogdown)构建，主题等信息可访问[https://rbas.netlify.com/about/](https://rbas.netlify.com/about/)。
+
+下文为测试`rmd`中公式与可视化交互的性能在该主题下的表现。
+
+## 公式测试
+
+行间公式：
+
+$$
+E = mc^2
+$$
+
+行内公式$E=mc^2$。
+
+## 可视化
+
+### ggplot2
+
+```{r}
+library(ggplot2)
+data(mpg)
+
+DT::datatable(data = mpg[,1:7])
+
+p <- ggplot(mpg,aes(x = hwy, y = displ, color = manufacturer)) + 
+  geom_point(alpha = 0.6) + 
+  theme_bw() + 
+  labs(color = '')
+
+print(p)
+```
+
+### 交互可视化
+
+```{r}
+plotly::ggplotly(p)
+```
+
