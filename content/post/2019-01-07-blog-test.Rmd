@@ -7,9 +7,9 @@ categories: []
 tags: []
 ---
 
-`blog`采用yihui的[`blogdown`](https://github.com/rstudio/blogdown)构建，主题等信息可访问[https://rbas.netlify.com/about/](https://rbas.netlify.com/about/)。
+`blog`采用yihui的[`blogdown`](https://github.com/rstudio/blogdown)构建。
 
-下文为测试`rmd`中公式与可视化交互的性能在该主题下的表现。
+下文目的为测试`rmd`中公式与可视化交互的性能在该主题下的表现。
 
 ## 公式测试
 
